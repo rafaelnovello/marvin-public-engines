@@ -23,7 +23,9 @@ class PredictionPreparator(EngineBasePrediction):
         super(PredictionPreparator, self).__init__(**kwargs)
 
     def execute(self, input_message, params, **kwargs):
-        input_message = self.marvin_model["vect"].transform([input_message])
-        input_message = input_message.toarray().tolist()
 
+        """
+        Return a prepared input_message compatible to the predict algorithm used by the model.
+        Use the self.model and self.metrics objects if necessary.
+        """
         return input_message

@@ -23,31 +23,21 @@ class TrainingPreparator(EngineBaseDataHandler):
         super(TrainingPreparator, self).__init__(**kwargs)
 
     def execute(self, params, **kwargs):
-        from sklearn.preprocessing import LabelEncoder
-        from sklearn.feature_extraction.text import CountVectorizer
 
         from sklearn.model_selection import train_test_split
 
+        X = self.marvin_initial_dataset.drop("Survived", axis=1)
+        y = self.marvin_initial_dataset["Survived"]
 
         X_train, X_test, y_train, y_test = train_test_split(
-            self.marvin_initial_dataset["text"],
-            self.marvin_initial_dataset["categoria"],
+            X, y,
             test_size=0.2,
-            random_state=10
+            random_state=42
         )
 
-        vect = CountVectorizer()
-        vect.fit(self.marvin_initial_dataset["text"])
-
-        encoder = LabelEncoder()
-        encoder.fit(self.marvin_initial_dataset["categoria"])
-
         self.marvin_dataset = {
-            "X_train": vect.transform(X_train),
-            "X_test": vect.transform(X_test),
-            "y_train": encoder.transform(y_train),
-            "y_test": encoder.transform(y_test),
-            "vect": vect,
-            "encoder": encoder
+            "X_train": X_train,
+            "X_test": X_test,
+            "y_train": y_train,
+            "y_test": y_test,
         }
-

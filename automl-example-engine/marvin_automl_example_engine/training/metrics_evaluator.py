@@ -23,14 +23,9 @@ class MetricsEvaluator(EngineBaseTraining):
         super(MetricsEvaluator, self).__init__(**kwargs)
 
     def execute(self, params, **kwargs):
-        from sklearn.metrics import classification_report
 
-
-        y_prediction = self.marvin_model["clf"].predict(self.marvin_dataset["X_test"])
-
-        report = classification_report(y_prediction, self.marvin_dataset["y_test"])
-
-        print(report)
-
-        self.marvin_metrics = report
-
+        score = self.marvin_model["pipe"].score(
+            self.marvin_dataset["X_test"],
+            self.marvin_dataset["y_test"]
+        )
+        self.marvin_metrics = score

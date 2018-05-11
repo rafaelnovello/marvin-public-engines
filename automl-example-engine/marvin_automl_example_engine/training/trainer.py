@@ -23,17 +23,12 @@ class Trainer(EngineBaseTraining):
         super(Trainer, self).__init__(**kwargs)
 
     def execute(self, params, **kwargs):
-        import autosklearn.classification as automl
 
-        clf = automl.AutoSklearnClassifier(
-            include_preprocessors=["no_preprocessing", ],
-            exclude_preprocessors=None
-        )
-        clf.fit(self.marvin_dataset["X_train"], self.marvin_dataset["y_train"])
+        from tpot import TPOTClassifier
+
+        tpot = TPOTClassifier(generations=5, population_size=50, verbosity=2, config_dict='TPOT MDR')
+        tpot.fit(self.marvin_dataset["X_train"], self.marvin_dataset["y_train"])
 
         self.marvin_model = {
-            "clf": clf,
-            "vect": self.marvin_dataset["vect"],
-            "encoder": self.marvin_dataset["encoder"]
+            "pipe": tpot.fitted_pipeline_,
         }
-

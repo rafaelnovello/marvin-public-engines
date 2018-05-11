@@ -23,9 +23,7 @@ class Predictor(EngineBasePrediction):
         super(Predictor, self).__init__(**kwargs)
 
     def execute(self, input_message, params, **kwargs):
-        import numpy as np
-        input_message = np.array(input_message)
-        pred = self.self.marvin_model["clf"].predict(input_message)[0]
-        final_prediction = self.self.marvin_model["encoder"].classes_[pred]
+
+        final_prediction = self.marvin_model["pipe"].predict(input_message)[0]
 
         return final_prediction
